@@ -1,145 +1,128 @@
-#  CEUCRUD — Sistema de Gerenciamento Universitário
-<img width="1916" height="1032" alt="CEUCRUD-DARK" src="https://github.com/user-attachments/assets/bafd0d3d-b8e7-4bb1-89a2-5506ae805abe" />
-<img width="1920" height="1040" alt="CEUCRUD-LIGHT" src="https://github.com/user-attachments/assets/df38007d-3246-4090-94d8-f71a6a05ac3c" />
+# CEUCRUD - Sistema de Gerenciamento Universitario
 
-O **CEUCRUD** é um sistema desktop desenvolvido em **Python**, utilizando a biblioteca **CustomTkinter**, para gerenciamento completo de dados universitários.  
-Ele se conecta a um banco MySQL e permite realizar **CRUD (Create, Read, Update, Delete)** das seguintes entidades:
+**Deploy:** publique a pasta `docs/` no GitHub Pages e substitua este texto pelo link final, por exemplo: `https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO/`
 
-- Cursos  
-- Alunos  
-- Funcionários  
-- Matérias  
-- Matrículas  
+O **CEUCRUD** e um sistema desktop desenvolvido em **Python** com **CustomTkinter** para gerenciamento de dados universitarios. Ele se conecta a um banco MySQL e permite realizar CRUD de cursos, alunos, funcionarios, materias e matriculas.
 
-Este projeto foi criado para fins de estudo e prática de lógica, GUI com Python e integração com banco de dados.
+Na entrega intermediaria, o projeto tambem passou a consumir uma **API publica do IBGE** para consultar municipios por UF, exibindo os dados em uma nova aba da interface.
 
----
+## Entrega Intermediaria
 
-##  Tecnologias Utilizadas
+- Issue sugerida: [docs/ISSUE_ENTREGA_INTERMEDIARIA.md](docs/ISSUE_ENTREGA_INTERMEDIARIA.md)
+- Branch obrigatoria: `entrega-intermediaria`
+- API integrada: IBGE Localidades
+- Endpoint usado: `https://servicodados.ibge.gov.br/api/v1/localidades/estados/{UF}/municipios`
+- Teste de integracao: `tests/test_api_ibge.py`
+- CI/CD: `.github/workflows/ci.yml`
+- Deploy: `docs/index.html` pronto para GitHub Pages
 
-- **Python 3**
-- **CustomTkinter**
-- **MySQL**
-- **mysql-connector-python**
-- **Tkinter (CTkTabview, CTkToplevel, CTkSwitch)**
+## Tecnologias Utilizadas
 
----
+- Python 3
+- CustomTkinter
+- MySQL
+- mysql-connector-python
+- API publica de Localidades do IBGE
+- unittest
+- GitHub Actions
+- GitHub Pages
 
-##  Estrutura do Projeto
+## Estrutura do Projeto
 
-├── main.py # Interface gráfica e lógica do sistema
-├── database.py # Conexão com o MySQL e funções CRUD
-├── bd_universidade.sql # Script do banco de dados completo
-└── roxo_theme.json # Tema personalizado (caso utilizado)
+```text
+.
+├── .github/workflows/ci.yml
+├── api_ibge.py
+├── bd_universidade.sql
+├── database.py
+├── docs/
+│   ├── ISSUE_ENTREGA_INTERMEDIARIA.md
+│   └── index.html
+├── main.py
+├── requirements.txt
+├── roxo_theme.json
+└── tests/
+    └── test_api_ibge.py
+```
 
+## Funcionalidades
 
----
+- Cursos: adicionar, listar, atualizar e excluir.
+- Alunos: adicionar, listar, atualizar e excluir.
+- Funcionarios: adicionar, listar, atualizar e excluir.
+- Materias: adicionar, listar, atualizar e excluir.
+- Matriculas: adicionar, listar, atualizar e excluir.
+- IBGE: consultar municipios por UF usando API publica.
 
-##  Funcionalidades
+## Banco de Dados
 
-###  Cursos
-- Adicionar curso  
-- Listar cursos  
-- Atualizar curso  
-- Excluir curso  
+O script `bd_universidade.sql` cria o banco `universidade`, suas tabelas e dados ficticios para teste.
 
-###  Alunos
-- Adicionar aluno  
-- Conversão automática da data (DDMMYYYY → YYYY-MM-DD)  
-- Listar alunos com nome do curso  
-- Atualizar aluno  
-- Excluir aluno  
-
-###  Funcionários
-- Adicionar  
-- Listar  
-- Editar  
-- Excluir  
-
-###  Matérias
-- Associar matérias a cursos  
-- CRUD completo  
-
-###  Matrículas
-- Matricular aluno em matéria  
-- Listar com nomes completos  
-- Atualizar matrícula  
-- Excluir matrícula  
-
----
-
-##  Banco de Dados
-
-O script `bd_universidade.sql` cria automaticamente:
-
-- Banco `universidade`
-- Tabelas:
-  - `tb_curso`
-  - `tb_aluno`
-  - `tb_funcionario`
-  - `tb_materia`
-  - `tb_matricula`
-- E ainda insere **dados fictícios** para teste.
-
-Para criar o banco, execute:
+Para criar o banco, execute no MySQL:
 
 ```sql
 SOURCE bd_universidade.sql;
 ```
-1️⃣ Instale as dependências
-```
-pip install customtkinter
-pip install mysql-connector-python
-```
-2️⃣ Configure sua conexão MySQL
 
-No arquivo database.py, altere:
-```
-host="localhost",
-user="root",
-password="SUA_SENHA",
+Depois configure a conexao em `database.py`:
+
+```python
+host="localhost"
+user="root"
+password="SUA_SENHA"
 database="universidade"
 ```
-3️⃣ Certifique-se de que o MySQL está rodando  
-▶️ Como executar a aplicação
+
+## Como Executar
+
+Instale as dependencias:
+
+```bash
+pip install -r requirements.txt
 ```
+
+Execute a aplicacao:
+
+```bash
 python main.py
 ```
 
-A interface será aberta automaticamente.
+## Como Testar
 
-## Interface
+Execute os testes automatizados:
 
-A interface utiliza o CustomTkinter com:
+```bash
+python -m unittest discover -s tests
+```
 
-Abas organizadas por categorias (Cursos, Alunos, Funcionários, Matérias, Matrículas)
+O teste de integracao simula a resposta da API do IBGE para validar o fluxo de dados sem depender de instabilidade externa durante a execucao da pipeline.
 
-Inputs de preenchimento
+## Como Publicar no GitHub Pages
 
-Janelas de atualização
+1. Suba o projeto para o GitHub.
+2. Acesse `Settings > Pages`.
+3. Em `Build and deployment`, selecione `Deploy from a branch`.
+4. Escolha a branch `main` e a pasta `/docs`.
+5. Salve e copie o link gerado.
+6. Atualize a linha **Deploy** no topo deste README com o link publico.
 
-Tema claro/escuro com um switch
+## Fluxo Git da Entrega
 
-Caixa de listagem dinâmica (CTkTextbox)
+```bash
+git checkout -b entrega-intermediaria
+git add .
+git commit -m "Integra API publica do IBGE"
+git push -u origin entrega-intermediaria
+```
 
-## Objetivo do Projeto
+Abra um Pull Request para `main` usando no texto:
 
-Este projeto foi desenvolvido para fins educacionais, com foco em:
+```text
+closes #NUMERO_DA_ISSUE
+```
 
-Aprender CRUD em Python
+Depois que o PR for aprovado/mesclado, a Issue sera fechada automaticamente.
 
-Criar interfaces gráficas modernas
+## Licenca
 
-Praticar integração com MySQL
-
-Entender relacionamentos entre tabelas
-
- Contribuições
-
-Sinta-se à vontade para abrir issues, sugerir melhorias ou enviar pull requests.
-
- Licença
-
-Este projeto está sob a licença MIT.
-Use, modifique e aprimore livremente.
-
+Este projeto esta sob a licenca MIT.

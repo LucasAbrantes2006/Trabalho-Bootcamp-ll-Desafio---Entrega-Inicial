@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from database import *
+from api_ibge import IBGEApiError, buscar_municipios_por_uf
 
 
 
@@ -41,6 +42,7 @@ class UniversidadeApp(ctk.CTk):
         aba_funcionarios = abas.add("Funcionários")
         aba_materias = abas.add("Matérias")
         aba_matriculas = abas.add("Matrículas")
+        aba_ibge = abas.add("IBGE")
 
         # ABA CURSOS
             #NOME
@@ -162,6 +164,25 @@ class UniversidadeApp(ctk.CTk):
         ctk.CTkButton(aba_matriculas, text="Listar Matrículas", command=self.listar_matriculas).place(relx=0.5 -0.05 , rely=0.85 , anchor="center")
             #ATUALIZAR
         ctk.CTkButton(aba_matriculas, text="Atualizar", command=self.popup_atualizar_matricula).place(relx=0.07, rely=0.5)
+
+        # ABA IBGE
+        ctk.CTkLabel(
+            aba_ibge,
+            text="Consulta de municipios por UF - API publica do IBGE",
+            font=("Arial", 20, "bold")
+        ).place(relx=0.5, rely=0.14, anchor="center")
+
+        self.ibge_uf = ctk.CTkEntry(aba_ibge, placeholder_text="UF (ex: SP)", width=160)
+        self.ibge_uf.place(relx=0.43, rely=0.25, anchor="center")
+
+        ctk.CTkButton(
+            aba_ibge,
+            text="Buscar Municipios",
+            command=self.buscar_municipios_ibge
+        ).place(relx=0.58, rely=0.25, anchor="center")
+
+        self.txt_ibge = ctk.CTkTextbox(aba_ibge, width=750, height=350)
+        self.txt_ibge.place(relx=0.5, rely=0.58, anchor="center")
         
 
     # FUNÇÕES DE CADA ABA
@@ -401,6 +422,21 @@ class UniversidadeApp(ctk.CTk):
             self.txt_exc_matriculas.get()
         )
         self.listar_matriculas()
+
+    # FUNCAO API IBGE
+    def buscar_municipios_ibge(self):
+        self.txt_ibge.delete("1.0", "end")
+
+        try:
+            municipios = buscar_municipios_por_uf(self.ibge_uf.get())
+        except (ValueError, IBGEApiError) as erro:
+            self.txt_ibge.insert("end", f"Erro: {erro}\n")
+            return
+
+        uf = self.ibge_uf.get().strip().upper()
+        self.txt_ibge.insert("end", f"Municipios encontrados para {uf}:\n\n")
+        for municipio in municipios:
+            self.txt_ibge.insert("end", f"- {municipio}\n")
         
     #DEF ALTERAR TEMA (MODO ESCURO)
     def alterar_tema(self):
