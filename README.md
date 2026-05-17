@@ -1,6 +1,6 @@
 # CEUCRUD - Sistema de Gerenciamento Universitario
 
-**Deploy:** publique a pasta `docs/` no GitHub Pages e substitua este texto pelo link final, por exemplo: `https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO/`
+**Deploy:** https://lucasabrantes2006.github.io/Trabalho-Bootcamp-II-Desafio---Entrega-Inicial/ `https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO/`
 
 O **CEUCRUD** e um sistema desktop desenvolvido em **Python** com **CustomTkinter** para gerenciamento de dados universitarios. Ele se conecta a um banco MySQL e permite realizar CRUD de cursos, alunos, funcionarios, materias e matriculas.
 
